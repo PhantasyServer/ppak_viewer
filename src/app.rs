@@ -1,3 +1,4 @@
+use chrono::{DateTime, Local};
 use egui::{InputState, Label};
 use egui_extras::{Column, TableBuilder};
 use pso2packetlib::{ppac::PacketData, protocol::Packet};
@@ -53,7 +54,13 @@ impl TemplateApp {
             self.packets.clear();
             self.values.clear();
             while let Some(packet) = reader.read()? {
-                self.values.push(format!("{:?}", packet.time));
+                let date = DateTime::from_timestamp_nanos(packet.time.as_nanos() as i64)
+                    .with_timezone(&Local);
+                self.values.push(format!(
+                    "({}) {:02X?}",
+                    date.format("%H:%M:%S%.f"),
+                    &packet.data.as_ref().unwrap()[4..8]
+                ));
                 self.packets.push(packet);
             }
         }
