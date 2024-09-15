@@ -9,6 +9,9 @@ env:
   RUSTFLAGS: -D warnings --cfg=web_sys_unstable_apis
   RUSTDOCFLAGS: -D warnings
 
+permissions:
+  contents: write
+
 jobs:
   check:
     name: Check
