@@ -137,6 +137,7 @@ impl eframe::App for TemplateApp {
                 }
 
                 egui::widgets::global_dark_light_mode_buttons(ui);
+                ui.vertical_centered(|ui| ui.label("Drag and drop a file to open it."));
             });
         });
 
@@ -199,12 +200,11 @@ impl eframe::App for TemplateApp {
                     );
                 });
 
-            ui.add(egui::github_link_file!(
-                "https://github.com/PhantasyServer/ppak_viewer/blob/master/",
-                "Source code."
-            ));
-
             ui.with_layout(egui::Layout::bottom_up(egui::Align::LEFT), |ui| {
+                ui.add(egui::github_link_file!(
+                    "https://github.com/PhantasyServer/ppak_viewer/blob/master/",
+                    "Source code."
+                ));
                 powered_by_egui_and_eframe(ui);
                 egui::warn_if_debug_build(ui);
             });
