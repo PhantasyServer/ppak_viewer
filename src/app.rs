@@ -56,11 +56,16 @@ impl TemplateApp {
             while let Some(packet) = reader.read()? {
                 let date = DateTime::from_timestamp_nanos(packet.time.as_nanos() as i64)
                     .with_timezone(&Local);
-                self.values.push(format!(
-                    "({}) {:02X?}",
+                let value = format!(
+                    "({}) ({}) {:02X?}",
                     date.format("%H:%M:%S%.f"),
-                    &packet.data.as_ref().unwrap()[4..8]
-                ));
+                    match packet.direction {
+                        pso2packetlib::ppac::Direction::ToServer => "C -> S",
+                        pso2packetlib::ppac::Direction::ToClient => "S -> C",
+                    },
+                    &packet.data.as_ref().unwrap()[4..8],
+                );
+                self.values.push(value);
                 self.packets.push(packet);
             }
         }
